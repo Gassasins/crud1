@@ -16,22 +16,29 @@ def login(request):
     if not request.user.is_authenticated():
     #     redirect('/')
         if request.method=='POST':
+
             form=loginform(request.POST)
+            
             if form.is_valid():
                 email = form.cleaned_data['email']
                 password = form.cleaned_data['password']
-                user = authenticate(username=email,password=password)
+                user = User.objects.get(email = email)
+                user = authenticate(username = user.email , password = password)
+
                 if user is not None:
                     login(request,user)
-                    return HttpResponseRedirect('/')
+                    return redirect('/')
+        
         else:
             form = loginform()
+        
         return render(request,'forms/login.html',{'form':form,})
     else:
         return redirect('/')
 
 def signup(request):
     form = signupform(request.POST)
+    
     if request.method == 'POST':
 
         if form.is_valid():
@@ -40,6 +47,7 @@ def signup(request):
 
     else:
         form= signupform()
+    
     return render(request, 'forms/signup.html', {'form': form,})
 
 ####login required####
@@ -47,7 +55,9 @@ def signup(request):
 @login_required
 def addpost(request):
     if request.method=='POST':
+    
         form=addpostform(request.POST)
+    
         if form.is_valid():
             Post.objects.Create(
                 author=request.user,
@@ -56,8 +66,10 @@ def addpost(request):
                 description=form.cleaned_data['description'],
             )
             return redirect("/")
+    
     else:
         form = addpostform()
+    
     return redirect('/')
 
 @login_required
