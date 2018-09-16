@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Sign Up Here</h2>
+    <div class="panel panel-default">
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-user"></span> Signup</button>
+            <a class="btn btn-sm" href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Already a user? Login here!</a>
+        </form>
+    </div>
+    
+</div>
+{% endblock %}
