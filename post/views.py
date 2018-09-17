@@ -7,28 +7,31 @@ from django.contrib.auth import authenticate, login, logout
 
 
 
+
 # Create your views here.
 def home(request):
     posts = Posts.objects.order_by('-datetime_modified')
     return render(request , "posts/home.html" , {'posts' : posts})
 
-def login(request):
+def login_site(request):
     if not request.user.is_authenticated():
     #     redirect('/')
         if request.method=='POST':
 
             form=loginform(request.POST)
-            
             if form.is_valid():
                 email = form.cleaned_data['email']
                 password = form.cleaned_data['password']
-                user = User.objects.get(email = email)
-                user = authenticate(username = user.email , password = password)
-
+                userobj = User.objects.get(email = email)
+                print(userobj)
+                user = authenticate(username = userobj.username , password = password)
+                print("Hello1", user)
                 if user is not None:
-                    login(request,user)
-                    return redirect('/')
-        
+                    login(request, user)
+                    print("Hello2")
+                    return redirect("/")
+                else:
+                    return redirect("/login")
         else:
             form = loginform()
         
@@ -87,10 +90,14 @@ def add_b(request):
                 blogtitle=form.cleaned_data['title'],
                 content=form.cleaned_data['content'],
             )
-
+            return ('/blogs')
+    else:
+        form = addblogform()
+    return redirect('/blogs')
+    
 @login_required
 def delete_b(request,pk):
-    Blog.objects.get(pk=pk,user=request.user).delete()
+    Blog.objects.get(pk=pk).delete()
     redirect('blogs/')
 
 
@@ -126,12 +133,14 @@ def edit_p(request,pk):
             post.save()
             return redirect('/')
     else:
-        form = addpostform()
+        form = addpostform(initial={'title':post.title,'description':post.description,'url':post.url})
     return render(request,"forms/addp.html",{'form':form,})
 
 @login_required
 def delete_p(request,pk):
-    Posts.objects.get(pk = pk, user = request.user).delete()
+    print(request.user)
+    # Posts.objects.get(pk = pk, user = request.user).delete()
+    Posts.objects.get(pk = pk).delete()
     return redirect('/')       
 
 @login_required

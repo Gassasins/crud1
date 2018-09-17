@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div>
+    <a href="{% url "addblog" %}" class="btn btn-primary btn-sm"> Add a Blog </a>
+</div>
 {% for blog in blogs %}
 <!-- <div class="container"> -->
 <div class="panel panel-default">
     <div class="panel-heading">
         <div>
             {{ blog.blogtitle }}
+            {{ blog.content }}
         </div>
     </div>
 </div>
