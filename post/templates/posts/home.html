@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% if user.is_authenticated %}
 <div id="add-post" style="float:left; margin-bottom: 40px;">
     <a href="{% url "addposts" %}" class="btn btn-primary btn-sm"> Add Post </a>
 </div>
+{% endif %}
 <br><br>
 <div class="container">    
     {% for post in posts %}
@@ -15,8 +17,8 @@
             <a href="#">{{ post.title }}</a>
         {% endif  %}
         {% if user.is_authenticated %}
-            <a href="{% url "edit_post" pk=post.author.id %}" class="btn btn-primary btn-sm" style="float: right;"> Edit Post </a>
-            <a href="{% url "deletepost" pk=post.author.id %}" class="btn btn-primary btn-sm" style="float: right;"> Delete Post </a>
+            <a href="{% url "edit_post" post.pk %}" class="btn btn-primary btn-sm" style="float: right;"> Edit Post </a>
+            <a href="{% url "deletepost" post.pk %}" class="btn btn-primary btn-sm" style="float: right;"> Delete Post </a>
         {% endif %}
         {{ post.description }}
         {% if post.datetime_added > post.datetime_modified %}

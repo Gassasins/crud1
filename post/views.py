@@ -23,12 +23,9 @@ def login_site(request):
                 email = form.cleaned_data['email']
                 password = form.cleaned_data['password']
                 userobj = User.objects.get(email = email)
-                print(userobj)
                 user = authenticate(username = userobj.username , password = password)
-                print("Hello1", user)
                 if user is not None:
                     login(request, user)
-                    print("Hello2")
                     return redirect("/")
                 else:
                     return redirect("/login")
@@ -59,10 +56,10 @@ def signup(request):
 def addpost(request):
     if request.method=='POST':
     
-        form=addpostform(request.POST)
+        form = addpostform(request.POST)
     
         if form.is_valid():
-            Post.objects.Create(
+            Posts.objects.create(
                 author=request.user,
                 title=form.cleaned_data['title'],
                 url=form.cleaned_data['url'],
@@ -73,32 +70,36 @@ def addpost(request):
     else:
         form = addpostform()
     
-    return redirect('/')
+    return render(request,'forms/addp.html',{'form':form,})
 
 @login_required
 def blogs(request):
-    blog=Blog.objects.order_by('-datetime_modified')
-    return render(request,'posts/blogs.html',{'blog':blog,})
+    blogs = Blog.objects.order_by('-datetime_added')
+    return render(request,'posts/blogs.html',{'blogs':blogs,})
 
 @login_required
 def add_b(request):
-    if request.method=='POST':
-        form=addblogform(request.POST)
+    # print('hell1')
+    if request.method == 'POST':
+        form = addblogform(request.POST)
         if form.is_valid():
-            Post.objects.Create(
-                author=request.user,
-                blogtitle=form.cleaned_data['title'],
-                content=form.cleaned_data['content'],
+            # form.save()
+            Blog.objects.create(
+                author = request.user,
+                blogtitle = form.cleaned_data['blogtitle'],
+                content = form.cleaned_data['content'],
             )
-            return ('/blogs')
+            # print("Hello")
+            return redirect('/blogs')
     else:
         form = addblogform()
-    return redirect('/blogs')
+        # print("form", form)
+    return render(request,'forms/addb.html',{'form':form,})
     
 @login_required
 def delete_b(request,pk):
-    Blog.objects.get(pk=pk).delete()
-    redirect('blogs/')
+    Blog.objects.get(pk = pk).delete()
+    return redirect('/blogs/')
 
 
 # @login_required
@@ -110,23 +111,25 @@ def delete_b(request,pk):
 def edit_b(request,pk):
     blog=Blog.objects.get(pk = pk)
     if request.method=='POST':
+        form=addblogform(request.POST)
         if form.is_valid():    
-            form=addblogform(request.POST)
-            user=request.user
-            blog.title=form.cleaned_data['blogtitle']
-            blog.content=form.cleaned_data['content']
-        blog.save()
+            user = request.user
+            blog.blogtitle = form.cleaned_data['blogtitle']
+            blog.content = form.cleaned_data['content']
+            blog.save()
+            return redirect('/blogs')
     else:
-        form = addblogform()
+        form = addblogform(initial={'blogtitle': blog.blogtitle,'content':blog.content,})
     return render(request,"forms/addb.html",{'form':form,})
 
 @login_required
 def edit_p(request,pk):
     post=Posts.objects.get(pk = pk)
     if request.method=='POST':
+        form=addpostform(request.POST)
         if form.is_valid():    
             # form=addpostform(request.POST)
-            user=request.user
+            user = request.user
             post.title = form.cleaned_data['title']
             post.description = form.cleaned_data['description']
             post.url = form.cleaned_data['url']
@@ -138,7 +141,6 @@ def edit_p(request,pk):
 
 @login_required
 def delete_p(request,pk):
-    print(request.user)
     # Posts.objects.get(pk = pk, user = request.user).delete()
     Posts.objects.get(pk = pk).delete()
     return redirect('/')       

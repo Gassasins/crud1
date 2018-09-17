@@ -4,14 +4,24 @@
 <div>
     <a href="{% url "addblog" %}" class="btn btn-primary btn-sm"> Add a Blog </a>
 </div>
+<br>
+<br>
 {% for blog in blogs %}
 <!-- <div class="container"> -->
 <div class="panel panel-default">
     <div class="panel-heading">
         <div>
             {{ blog.blogtitle }}
-            {{ blog.content }}
+        
+            <div style="float:right">
+                    <a href="{% url "edit_blog" blog.pk %}" class="btn btn-primary btn-sm"> Edit Blog </a>
+                    <a href="{% url "deleteblog" blog.pk %}" class="btn btn-primary btn-sm"> Delete Blog </a>
+            </div>
         </div>
+            <!-- <br> -->
+    </div>
+    <div class="panel-body">
+        {{ blog.content }}
     </div>
 </div>
 <!-- </div> -->
