@@ -10,22 +10,32 @@
 <div class="container">    
     {% for post in posts %}
     <div class="panel panel-default">
-
-        {% if post.url is not none %}
-            <a href="{{ post.url }}">{{ post.title }}</a>
-        {% else %}
-            <a href="#">{{ post.title }}</a>
-        {% endif  %}
-        {% if user.is_authenticated %}
-            <a href="{% url "edit_post" post.pk %}" class="btn btn-primary btn-sm" style="float: right;"> Edit Post </a>
-            <a href="{% url "deletepost" post.pk %}" class="btn btn-primary btn-sm" style="float: right;"> Delete Post </a>
-        {% endif %}
-        {{ post.description }}
-        {% if post.datetime_added > post.datetime_modified %}
-            {{ post.datetime_added }}
-        {% else %}
-            {{ post.datetime_modified }}
-        {% endif %}
+        <div class="panel-heading">
+            <div class="panel-title pull-left">
+                {% if post.url is not none %}
+                    <a href="{{ post.url }}">{{ post.title }}</a>
+                {% else %}
+                    <a href="#">{{ post.title }}</a>
+                {% endif  %}
+            </div>
+            {% if user.is_authenticated %}
+                <div class="panel-title pull-right">
+                    {{ post.user.fullname }}
+                </div>
+            {% endif %}
+        </div>
+        <div class="panel-body">
+            {% if user.is_authenticated %}
+                <a href="{% url "edit_post" post.pk %}" class="btn btn-primary btn-sm" style="float: right;"> Edit Post </a>
+                <a href="{% url "deletepost" post.pk %}" class="btn btn-primary btn-sm" style="float: right;"> Delete Post </a>
+            {% endif %}
+            {{ post.description }}
+            {% if post.datetime_added > post.datetime_modified %}
+                {{ post.datetime_added }}
+            {% else %}
+                {{ post.datetime_modified }}
+            {% endif %}
+        </div>
     </div>
     {% endfor %}
 </div>

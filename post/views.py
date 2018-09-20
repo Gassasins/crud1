@@ -113,7 +113,7 @@ def edit_b(request,pk):
     if request.method=='POST':
         form=addblogform(request.POST)
         if form.is_valid():    
-            user = request.user
+            author = request.user
             blog.blogtitle = form.cleaned_data['blogtitle']
             blog.content = form.cleaned_data['content']
             blog.save()
@@ -129,7 +129,7 @@ def edit_p(request,pk):
         form=addpostform(request.POST)
         if form.is_valid():    
             # form=addpostform(request.POST)
-            user = request.user
+            author = request.user
             post.title = form.cleaned_data['title']
             post.description = form.cleaned_data['description']
             post.url = form.cleaned_data['url']
