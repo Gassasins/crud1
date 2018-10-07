@@ -17,23 +17,25 @@
                 <div class="navbar-header">
                     <a href="#"><h3>Post-Listed</h3></a>
                 </div>
-                    <ul class="navbar navbar-nav"  >
+                    <ul class="nav navbar-nav"  >
 
                         <li><a href="{% url 'home' %}">Home</a></li>
                         <!-- active replace -->
 
                         {% if user.is_authenticated %}
-                        <li>User: {{ user.get_username }}</li>
                         <li><a href="{% url 'blogview' %}"> Blogs </a></li>
+                        <li><a href="{% url 'myblogs' user.pk %}"> My Blogs </a></li>
                         <!-- <div class="nav navbar-nav navbar-right"> --> 
                         {% endif %}
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         {% if user.is_authenticated %}
+                        <li><a>User: {{ user.get_username }}</a></li>
                         <li><a href="{% url 'logout' %}">Logout</a></li>
                         {% else %}
                         <li ><a href="{% url 'login' %}">Login</a></li>
-                        <li><span class="glyphicon glyphicon-user"><a href="{% url 'signup' %}"> Sign Up</a></span></li>
+                        <!-- <li><span class="glyphicon glyphicon-user"><a href="{% url 'signup' %}"> Sign Up</a></span></li> -->
+                        <li><a href="{% url 'signup' %}"> Sign Up</a></li>
                         {% endif %}
                     </ul>
             </div>

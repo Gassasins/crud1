@@ -144,6 +144,18 @@ def delete_p(request,pk):
     # Posts.objects.get(pk = pk, user = request.user).delete()
     Posts.objects.get(pk = pk).delete()
     return redirect('/')       
+@login_required
+def myposts(request,pk):
+    post = Posts.objects.get(pk = pk).order_by('-datetime_modified')
+    return render
+
+@login_required
+def myblogs(request,pk):
+    x = author.request.user.pk
+    print(x)
+    if pk == x:
+        blogs = Blog.objects.get(pk = x).order_by('-datetime_modified')
+    return render(request,'posts/blogs.html',{'blogs':blogs,})
 
 @login_required
 def logout_req(request):

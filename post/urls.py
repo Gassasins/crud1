@@ -12,8 +12,10 @@ urlpatterns=[
     url(r'^logout/' , views.logout_req , name = 'logout'),
     url(r'^blogs/delete/(?P<pk>\d+)/',views.delete_b,name='deleteblog'),
     url(r'^posts/delete/(?P<pk>\d+)/',views.delete_p,name='deletepost'),
-    url(r'^blogs/edit/(?P<pk>\d+)/',views.edit_b,name='edit_blog'),
-    url(r'^posts/edit/(?P<pk>\d+)/',views.edit_p,name='edit_post'),
+    url(r'^blogs/edit/(?P<pk>\d+)/',views.edit_b,name = 'edit_blog'),
+    url(r'^posts/edit/(?P<pk>\d+)/',views.edit_p,name = 'edit_post'),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^posts/myposts/(?P<pk>\d+)/',views.myposts,name = 'myposts'),
+    url(r'^blogs/myblogs/(?P<pk>\d+)/', views.myblogs, name = 'myblogs'),
 
 ]

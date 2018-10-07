@@ -11,7 +11,7 @@
     {% for post in posts %}
     <div class="panel panel-default">
         <div class="panel-heading">
-            <div class="panel-title pull-left">
+            <div class="panel-title">
                 {% if post.url is not none %}
                     <a href="{{ post.url }}">{{ post.title }}</a>
                 {% else %}
